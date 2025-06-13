@@ -10,13 +10,26 @@ import songRoutes from './routes/songs.route.js';
 import albumRoutes from './routes/albums.route.js';
 import statRoutes from './routes/stats.route.js';
 import connectDB from './lib/db.js';
-dotenv.config();
+import cors from 'cors';
 
+
+
+
+dotenv.config();
 
 const __dirname = path.resolve();
 const app = express();
 const PORT=process.env.PORT ;
 
+
+
+
+app.use(cors(
+  {
+    origin: 'http://localhost:5173',
+    credentials: true
+  }
+))
 app.use(express.json());
 app.use(clerkMiddleware());
 app.use(fielupload({
@@ -25,6 +38,8 @@ app.use(fielupload({
   createParentPath: true,
   limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
 }));
+
+;
 
 
 app.use("/api/users", userRoutes);

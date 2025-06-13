@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { protectRoute, requireAdmin } from "../middleware/auth.middleware.js";
+import { getAllSongs, getFeaturedSongs, getMadeForYou, getTrending } from "../controller/song.controller.js";
 
 const router = Router();
 
+router.get("/", protectRoute,requireAdmin,getAllSongs);
+router.get("/featured", getFeaturedSongs); 
+router.get("/made-for-you", getMadeForYou); 
+router.get("/trending", getTrending); 
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Albums route is working",
-  });
-});
 export default router;  

@@ -1,24 +1,34 @@
 import { useState } from 'react'
 import './App.css'
-import { Button } from './components/ui/button'
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './page/Home/HomePage';
+import AuthCallbackPage from './page/Auth-callback/AuthCallbackPage';
+import { axiosInstance } from '../src/lib/axios.ts';
+import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 
 function App() {
 
+  const getSomeData = async () => {
+    const res=await axiosInstance.get('/users',{
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+  console.log(res);
+  }
+
   return (
     <>
-    <header>
-      <SignedOut>
-        <SignInButton>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-            Sign In
-          </Button>
-        </SignInButton>
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-    </header>
+    <Routes>
+        <Route path='/' element={<HomePage/>}/>
+
+        <Route 
+        path='/sso-callback' 
+        element={<AuthenticateWithRedirectCallback signInForceRedirectUrl={"/auth-callback"}/>}/>
+        
+        <Route path='/auth-callback' element={<AuthCallbackPage/>}/>
+    </Routes>
     </>
   )
 }
