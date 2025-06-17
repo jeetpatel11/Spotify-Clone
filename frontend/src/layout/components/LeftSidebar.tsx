@@ -78,7 +78,7 @@ function LeftSidebar() {
                     key={album._id}
                     className='p-2 hover:bg-zinc-800 rounded-md flex item-center gap-3 group cursor-pointer'
                     >
-                      <img src={album.imageUrl} alt={album.name} className='size-12  rounded-md flex-shrink-0 object-cover '/>
+                      <img src={album.imageUrl} alt={album.title} className='size-12  rounded-md flex-shrink-0 object-cover '/>
                       <div className='felx-1 min-w-0 hidden md:block text-white'>
                         <p className='font-medium truncate'>{album.title}</p>
                         <p className='text-xs text-zinc-400 group-hover:text-white truncate'>{album.artist}</p>

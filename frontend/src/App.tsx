@@ -7,18 +7,19 @@ import { axiosInstance } from '../src/lib/axios.ts';
 import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 import MainLayout from './layout/MainLayout.tsx';
 import ChatPage from './page/chat/ChatPage.tsx';
+import AlbumPage from './page/album/AlbumPage.tsx';
 
 function App() {
 
-  const getSomeData = async () => {
-    const res=await axiosInstance.get('/users',{
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+  // const getSomeData = async () => {
+  //   const res=await axiosInstance.get('/users',{
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`
+  //     }
+  //   });
     
-  console.log(res);
-  }
+  // console.log(res);
+  // }
 
   return (
     <>
@@ -30,6 +31,7 @@ function App() {
         <Route element={<MainLayout/>}>
           <Route path='/' element={<HomePage/>}/>
           <Route path='/chat' element={<ChatPage/>}/>
+          <Route path='/albums/:id' element={<AlbumPage/>}/>
         </Route>
 
     </Routes>
