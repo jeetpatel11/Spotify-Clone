@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { clerkMiddleware } from '@clerk/express';
+
+
 import path from 'path';
 import fielupload from 'express-fileupload';
 import userRoutes from './routes/user.route.js';
@@ -32,6 +34,7 @@ app.use(cors(
 ))
 app.use(express.json());
 app.use(clerkMiddleware());
+
 app.use(fielupload({
   useTempFiles: true,
   tempFileDir: path.join(__dirname,"tmp"),

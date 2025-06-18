@@ -1,12 +1,13 @@
+import { clerkClient } from '@clerk/clerk-sdk-node'; // Add if needed
 import User from '../models/user.model.js';
 
-export const getAllUsers = async (req, res,next) => {
-    try{
-        const currentUserId = req.auth.userId;
-        const users=await User.find({clerkId: {$ne: currentUserId}});
-    }   
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const { userId } = req.auth(); // ✅ Call as a function
 
-    catch (error) {
-        next(error);
-    }
-}
+    const users = await User.find({ clerkId: { $ne: userId } });
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
