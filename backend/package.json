@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "dev": " nodemon src/index.js",
-    "seed:songs":"node src/seeds/song.js",
-    "seed:album":"node src/seeds/album.js"
+    "seed:songs": "node src/seeds/song.js",
+    "seed:album": "node src/seeds/album.js"
   },
   "keywords": [],
   "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@clerk/backend": "^2.1.0",
     "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/express": "^1.6.0",
     "cloudinary": "^2.6.1",

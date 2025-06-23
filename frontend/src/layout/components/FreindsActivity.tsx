@@ -1,101 +1,99 @@
-import { Headphones, Music, Users } from 'lucide-react'
-import { useChatStore } from '@/stores/useChatStore'
+import { Headphones, Music, Users } from 'lucide-react';
 import { useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@clerk/clerk-react';
+import { useChatStore } from '@/stores/useChatStore';
 
+function FriendsActivity() {
+  const { isSignedIn, getToken } = useAuth();
+  const { users, fetchUsers } = useChatStore();
+  const isPlaying = true;
 
-function FreindsActivity() {
-  const {users,fetchUsers}=useChatStore();
-  const isPlaying=true;
-  useEffect(()=>{
-    fetchUsers();
-  },[fetchUsers])
+  useEffect(() => {
+    const fetchWithToken = async () => {
+      const token = await getToken();
+      if (isSignedIn && token) {
+        fetchUsers(token);
+      }
+    };
+    fetchWithToken();
+  }, [isSignedIn, getToken, fetchUsers]);
+
   return (
-    <div className="h-full bg-zinc-900 rounded-lg flex flex-col">
-      <div className='p-4 flex justify-between items-center border-b border-zinc-800'>
-        <div className='flex items-center gap-2'>
-          <Users className='size-5 shrink-0'/>
-          <h2 className='font-semibold'>what they're listening to</h2>
+    <div className="h-full bg-zinc-900 rounded-xl flex flex-col shadow-md">
+      <div className="p-5 border-b border-zinc-800 flex justify-between items-center bg-zinc-950 rounded-t-xl">
+        <div className="flex items-center gap-3 text-white">
+          <Users className="size-5" />
+          <h2 className="text-lg font-semibold tracking-wide">What Friends Are Listening To</h2>
         </div>
       </div>
 
-      {!users && <Loginprompt/>}
-      <ScrollArea className='flex-1'>
-        <div className='p-4 space-y-4'>
-          {users.map((users)=>(
-            <div key={users._id} className='cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group '>
-              <div className='flex items-start gap-3'>
-                <div className='relative'>
-                  <Avatar className='size-10 border border-zinc-800'>
-                    <AvatarImage src={users.imageUrl} alt={users.fullName}/>
-                    <AvatarFallback>{users.fullName[0]}</AvatarFallback>
+      {!isSignedIn || !users?.length ? (
+        <LoginPrompt />
+      ) : (
+        <ScrollArea className="flex-1">
+          <div className="p-5 space-y-4">
+            {users.map((user) => (
+              <div
+                key={user._id}
+                className="p-4 rounded-xl transition-all flex items-center gap-4 hover:bg-zinc-800/40 cursor-pointer"
+              >
+                <div className="relative">
+                  <Avatar className="size-12 border border-zinc-700 shadow-sm">
+                    <AvatarImage src={user.imageUrl} alt={user.fullName} />
+                    <AvatarFallback>{user.fullName[0]}</AvatarFallback>
                   </Avatar>
-                  <div className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-zinc-500` 
-                  }aria-hidden='true'>
-                    
-                    <div className='flex-1 min-w-0'>
-                      <div className='flex items-center gap-2'>
-                        <span className='font-semibold text-sm text-white'>{users.fullName}</span>
-                      </div>
-                      {isPlaying && <Music className='size-3.5 text-emerald-400 shrink-0'/>}
-                    </div>
+                  <div className="absolute bottom-0 right-0 h-3 w-3 bg-emerald-400 border-2 border-zinc-900 rounded-full" />
+                </div>
 
-                    {isPlaying ?(
-                      <div className='mt-1'>
-                        <div className='mt-1 text-sm text-white font-medium truncate'>
-                          Cardigan
-                        </div>
-                        <div className='text-xs text-zinc-400'>
-                          by Taylor Swift
-                        </div>
-                      </div>
-                    ):(<div className='mt-1 text-xs text'>Idle</div>)}
-                    
+                <div className="flex flex-col min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-medium truncate">{user.fullName}</span>
+                    {isPlaying && <Music className="size-4 text-emerald-400" />}
                   </div>
+
+                  {isPlaying ? (
+                    <>
+                      <div className="text-sm text-white mt-1 truncate">Cardigan</div>
+                      <div className="text-xs text-zinc-400">by Taylor Swift</div>
+                    </>
+                  ) : (
+                    <div className="text-sm text-zinc-500 mt-1">Idle</div>
+                  )}
+                </div>
               </div>
-            </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-      <div>
-        <Loginprompt/>
-      </div>
+            ))}
+          </div>
+        </ScrollArea>
+      )}
     </div>
-  )
+  );
 }
 
-export default FreindsActivity
+export default FriendsActivity;
 
 
 
 
-
-const Loginprompt = () => {
+const LoginPrompt = () => {
   return (
-    <div className='h-full flex flex-col items-center justify-center p-6 text-center space-y-4'>
-      <div className='relative flex flex-col items-center justify-center space-y-4'>
-        {/* Blurred background ring */}
+    <div className="h-full flex flex-col items-center justify-center p-6 text-center space-y-4">
+      <div className="relative flex flex-col items-center justify-center space-y-4">
         <div
-          className='absolute inset-20 bg-gradient-to-r from-emerald-500 to-sky-500 rounded-full blur-lg opacity-75 animate-pulse'
-          aria-hidden='true'
+          className="absolute inset-20 bg-gradient-to-r from-emerald-500 to-sky-500 rounded-full blur-lg opacity-75 animate-pulse"
+          aria-hidden="true"
         />
-        
-        {/* Icon container */}
-        <div className='relative bg-zinc-900 rounded-full p-4 z-10'>
-          <Headphones className='size-8 text-emerald-400' />
+        <div className="relative bg-zinc-900 rounded-full p-4 z-10">
+          <Headphones className="size-8 text-emerald-400" />
         </div>
-
-        {/* Text below the icon */}
-        <div className='space-y-2 max-w-[250px] z-10'>
-          <h3 className='text-white font-semibold text-lg'>See What Friends Are Playing</h3>
-          <p className='text-sm text-zinc-400'>
+        <div className="space-y-2 max-w-[250px] z-10">
+          <h3 className="text-white font-semibold text-lg">See What Friends Are Playing</h3>
+          <p className="text-sm text-zinc-400">
             Login to discover the music you and your friends are listening to.
           </p>
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};

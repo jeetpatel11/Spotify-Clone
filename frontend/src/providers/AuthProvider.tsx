@@ -1,10 +1,11 @@
+
 import { useAuth } from '@clerk/clerk-react';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../lib/axios.ts';
 import {Loader} from 'lucide-react'
 const updateApitoken = (token: string | null) => {
     if (token) {
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
         axiosInstance.defaults.headers.common['Authorization'] = '';
     }
@@ -18,22 +19,22 @@ function AuthProvider({children}: {children: React.ReactNode}) {
     const {getToken}= useAuth();
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
-        const initializeAuth = async () => {
+    const initializeAuth = async () => {
             try{
-                const token = await getToken();
+        const token = await getToken();
                 updateApitoken(token);
 
                 
             }
             catch (error) {   
                 updateApitoken(null);
-                console.error('Error fetching token:', error);         
+        console.error('Error fetching token:', error);
             }
             finally {
-                setLoading(false);
-            }
+        setLoading(false);
+      }
     };
-        initializeAuth();
+    initializeAuth();
 },[getToken])
 
 

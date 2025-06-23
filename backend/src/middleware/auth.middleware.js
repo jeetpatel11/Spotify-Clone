@@ -17,26 +17,29 @@ export const protectRoute = async (req, res, next) => {
   }
 };
 
+
 export const requireAdmin = async (req, res, next) => {
+  try {
+    // ✅ Fix: get userId from req.auth().sub, not req.user.id
+    const userId = req.auth().sub;
 
-    try{
-    const currentUser = await clerkClient.users.getUser(req.auth.userId);
-    const isAdmin = process.env.ADMIN_EMAILS===currentUser.primaryEmailAddress.emailAddress;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized - Missing user ID" });
+    }   
 
-    if(!isAdmin)
-    {
-      return  res.status(403).json({
-            message: "Forbidden - You do not have permission to access this route"
-        });
+    const user = await clerkClient.users.getUser(userId);
+
+    const email = user?.emailAddresses?.[0]?.emailAddress;
+    console.log("🟢 Admin email check:", email);
+
+    if (email?.toLowerCase().trim() !== process.env.ADMIN_EMAIL.toLowerCase().trim()) {
+      return res.status(403).json({ message: "Access denied. Admins only." });
     }
 
-
-
+    req.user = { id: userId, email, role: "admin" };
     next();
-
-    }
-    catch (error) {
-    console.error("Error fetching user:", error);
-    }
-
-}
+  } catch (err) {
+    console.error("❌ requireAdmin error:", err);
+    return res.status(403).json({ message: "Admin verification failed" });
+  }
+};

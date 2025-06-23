@@ -1,33 +1,48 @@
 import { LayoutDashboardIcon } from 'lucide-react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SignInOAuthButton from './SignInOAuthButton';
-import { SignedIn, SignedOut, SignOutButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { buttonVariants } from './ui/button';
+import { cn } from '@/lib/utils';
 
 function TopBar() {
 
-    const isAdmin = true; // Replace with actual admin check logic
+  const {isAdmin,checkAdminStatus}=useAuthStore();
+
+
+  useEffect(() => {
+  useAuthStore.getState().checkAdminStatus();
+}, []);
+
+
+  console.log("ADDDDDDDDdd",isAdmin);
 
   return (
-    <div className='w-full flex items-center justify-between top-0 p-4 sticky bg-zinc-900/75 backdrop-blur-md z-10 '>
+    <div className='w-full rounded-md flex items-center justify-between top-0 p-4 sticky bg-zinc-900/75 backdrop-blur-md z-10 '>
         <div className="flex gap-2 items-center">
+            <img src="/spotify.png"  className='size-8 '/>
             Spotify
         </div>
         <div className='flex items-center gap-4'>
             {isAdmin &&(
-                <Link to='/admin'>
+                <Link to='/admin'
+                className={cn(
+                    buttonVariants({variant:'outline',})
+                )}>
                     <LayoutDashboardIcon className='size-4 mr-2' />
                     Admin Dashboard
                 </Link>
             )}
 
-            <SignedIn>  
-                <SignOutButton/>
-            </SignedIn>
+            
 
             <SignedOut>
                 <SignInOAuthButton/>
             </SignedOut>
+
+            <UserButton/>
         </div>
     </div>
   )

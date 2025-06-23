@@ -25,7 +25,7 @@ function AlbumPage() {
 
   return (
     <div className='h-full '>
-        <ScrollArea className='h-full  scrollbar-hide '>
+        <ScrollArea className='h-full  scrollbar-hide rounded-md'>
 
             {/*MAIN CoNTENT*/ }
 
