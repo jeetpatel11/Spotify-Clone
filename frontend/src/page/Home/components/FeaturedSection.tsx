@@ -1,6 +1,7 @@
 import FeaturedGridSkeleton from '../../../skelotons/FeaturedGridSkeleton.tsx';
 import { useMusicStore } from '@/stores/useMusicStore'
 import React from 'react'
+import PlayButton from './PlayButton.tsx';
 
 function FeaturedSection() {
 
@@ -24,7 +25,9 @@ function FeaturedSection() {
                     <p className='font-medium truncate'>{song.title}</p>
                     <p className='font-sm text-zinc-400 truncate'>{song.artist}</p>
                 </div>
+                <PlayButton song={song}/>
             </div>
+            //TODO: add play button
         ))}
     </div>
   )

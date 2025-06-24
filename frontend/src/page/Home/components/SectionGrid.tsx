@@ -2,6 +2,7 @@ import React from 'react'
 import SectionGridSkeleton from './SectionGridSkeleton';
 import { Button } from '@/components/ui/button';
 import type { Song } from '@/types';
+import PlayButton from './PlayButton';
 
 type SectionGridProps={
     title:string,
@@ -31,11 +32,11 @@ function SectionGrid({title,songs,isLoading}:SectionGridProps) {
                 </div>
                 {/* <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-black/90 p-2 rounded-b-md'>
                     
-                </div> */}
+                    </div> */}
+                    <PlayButton song={song}/>
               </div>
               <h3 className='font-medium mb-2 truncate' >{song.title}</h3>
               <p className='text-sm text-zinc-400 truncate'>{song.artist}</p>
-              
               </div>
             ))}
         </div>
