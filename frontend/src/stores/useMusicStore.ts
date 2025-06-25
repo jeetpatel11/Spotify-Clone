@@ -1,5 +1,6 @@
 import { axiosInstance } from '@/lib/axios';
-import type { Album, Song } from '@/types';
+import type { Album, Song, Stats } from '@/types';
+import toast from 'react-hot-toast';
 import {create} from 'zustand';
 
 interface MusicStore{
@@ -10,7 +11,8 @@ interface MusicStore{
     currentAlbum:Album|null,
     madeForYouSongs:Song[],
     trendingSongs:Song[],
-    featuredSongs:Song[]
+    featuredSongs:Song[],
+    stats:Stats
 
 
     fetchAlbums:()=>Promise<void>;
@@ -18,6 +20,10 @@ interface MusicStore{
     fetchFeaturedSongs:()=>Promise<void>;
     fetchMadeForYouSongs:()=>Promise<void>;
     fetchTrendingSongs:()=>Promise<void>;
+    fetchstats:()=>Promise<void>;
+    fetchSongs:()=>Promise<void>;
+    deleteSong:(id:string)=>Promise<void>;
+    deleteAlbum:(id:string)=>Promise<void>;
 }
 
 export const useMusicStore=create<MusicStore>((set,get)=>({
@@ -29,9 +35,68 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
     madeForYouSongs:[],
     trendingSongs:[],
     featuredSongs:[],
+    stats:{
+        totalAlbums:0,
+        totalArtists:0,
+        totalUsers:0,
+        totalSongs:0,
+    },
+    isSongLoading:false,
+    isStatsLoading:false,
+
+
+
+    deleteSong:async(id)=>{
+        set({isLoading:true,error:null});
+        try{
+            
+            await axiosInstance.delete(`/admin/songs/${id}`)
+            set(state=>({songs:state.songs.filter(song=>song._id!==id)}))
+            toast.success("Song deleted successfully")
+        }
+        catch (e)
+        {
+            toast.error("Error in deleting song");
+        }
+        finally
+        {
+            set({isLoading:false});
+        }
+    },
+
+    deleteAlbum:async(id)=>{
+        set({isLoading:true,error:null});
+        try{
+            await axiosInstance.delete(`/admin/albums/${id}`)
+            set(state=>({albums:state.albums.filter(album=>album._id!==id)}))
+            toast.success("Album deleted successfully")
+        }
+        catch (e)
+        {
+            toast.error("Error in deleting album");
+        }
+        finally
+        {
+            set({isLoading:false});
+        }
+    },
     
+    fetchstats:async()=>{
+        set({isLoading:true,error:null})
+        try{
+            const res=await axiosInstance.get("/stats");
+            set({stats:res.data})
 
-
+        }
+        catch (e)
+        {
+            set({ error: e instanceof Error? e.message : String(e) })
+        }
+        finally
+        {
+            set({isLoading:false});
+        }
+    },
 
     fetchAlbums:async()=>{
         
@@ -120,6 +185,26 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
         {
             set({isLoading:false});
         }
-    }
+    },
+
+
+    fetchSongs:async()=>{
+        set({isLoading:true,error:null})
+        try{
+            const res=await axiosInstance.get("/songs");
+            set({songs:res.data})
+
+        }
+        catch (e)
+        {
+            set({ error: e instanceof Error? e.message : String(e) })
+        }
+        finally
+        {
+            set({isLoading:false});
+        }
+    },
+
+
 
 }))

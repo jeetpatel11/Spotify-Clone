@@ -1,8 +1,12 @@
+import Song  from '../models/song.model.js';
+import User  from '../models/user.model.js';
+import Album  from '../models/album.model.js';
+
 export const getState= async (req, res, next) => {
 try{
     
 
-    const [totalSongs,totalUsers,totalAlbums]=await Promise.all([
+    const [totalSongs,totalUsers,totalAlbums,totalArtists]=await Promise.all([
       Song.countDocuments(),
       User.countDocuments(),
       Album.countDocuments(),

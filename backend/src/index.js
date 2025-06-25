@@ -13,7 +13,7 @@ import albumRoutes from './routes/albums.route.js';
 import statRoutes from './routes/stats.route.js';
 import connectDB from './lib/db.js';
 import cors from 'cors';
-
+import cookieParser from 'cookie-parser';
 
 
 
@@ -32,6 +32,8 @@ app.use(cors(
     credentials: true
   }
 ))
+app.use(cookieParser()); // ✅ Add this BEFORE protectRoute
+
 app.use(express.json());
 app.use(clerkMiddleware());
 

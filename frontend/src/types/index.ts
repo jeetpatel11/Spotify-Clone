@@ -19,3 +19,11 @@ export interface Album{
     songs:Song[];
     
 }
+
+
+export interface Stats{
+    totalSongs:number;
+    totalAlbums:number;
+    totalArtists:number;
+    totalUsers:number;
+}

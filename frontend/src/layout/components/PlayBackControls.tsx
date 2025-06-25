@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from 'react'
 
 function PlayBackControls() {
 
-    const {currentSong,isPlaying,togglePlay,playNext,playPrevious} = usePlayerStore();
+    const {currentSong,isPlaying,tooglePlay,playNext,playPrevious} = usePlayerStore();
     const [voulume,setVolume] = React.useState(75);
     const [duration,setDuration] = React.useState(0);
     const [currentTime,setCurrentTime] = React.useState(0);
@@ -94,7 +94,7 @@ function PlayBackControls() {
               
               <Button 
               size='icon'
-              onClick={togglePlay}
+              onClick={tooglePlay}
               disabled={!currentSong}
               className='bg-white hover:bg-white/80 text-black rounded-full h-8 w-8'>
                  {isPlaying ?(

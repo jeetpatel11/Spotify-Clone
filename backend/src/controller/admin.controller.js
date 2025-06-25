@@ -1,22 +1,26 @@
 import Song from '../models/song.model.js';
 import Album from '../models/album.model.js';
 
+import { v2 as cloudinary } from "cloudinary";
 
+// Cloudinary config
+cloudinary.config({
+  cloud_name: "dz0mno2r4",
+  api_key:"491833532327491",
+  api_secret:"-YzcntOfRCyLaEI-Z1Z1AY88tto",
+});
 
 const uploadCloudinaryFile = async (file) => {
   try {
-    const cloudinary = require('cloudinary').v2;
-    const result=await cloudinary.uploader.upload(file.tempFilePath, {
-      resource_type: 'auto',  
-    }
-    )
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto",
+    });
     return result.secure_url;
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error uploading file to Cloudinary:", error);
     throw new Error("Failed to upload file to Cloudinary");
   }
-}
+};
 
 
 export const checkAdmin=async (req, res,next) => {
@@ -24,10 +28,6 @@ export const checkAdmin=async (req, res,next) => {
   res.status(200).json({admin:true});
 
 }
-
-
-
-
 export const createSong=async (req, res,next) => {
   try{
     if(!req.files||!req.files.audioFile||!req.files.imageFile)
@@ -57,7 +57,7 @@ export const createSong=async (req, res,next) => {
 
     await song.save();
 
-    if(!albumId)
+    if(albumId)
     {
       await Album.findByIdAndUpdate(albumId,{
         $push: { songs: song._id }
@@ -73,29 +73,32 @@ export const createSong=async (req, res,next) => {
   }
 }
 
-export const deleteSong=async (req, res,next) => {
-  try{
-    const {id} = req.params;
+export const deleteSong = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-    const song = await Song.findByIdAndDelete(id);
+    const song = await Song.findById(id);
 
-    if(!song.albumId)
-    {
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
+
+    // Remove song reference from album if albumId exists
+    if (song.albumId) {
       await Album.findByIdAndUpdate(song.albumId, {
-        $pull: { songs: song._id }
+        $pull: { songs: song._id },
       });
     }
 
-    await song.findByIdAndDelete();
+    // Now delete the song
+    await Song.findByIdAndDelete(id);
 
-    res.status(200).json({message: "Song deleted successfully", song});
-  }
-  catch(e)
-  {
+    res.status(200).json({ message: "Song deleted successfully", song });
+  } catch (e) {
     console.log(e);
     next(e);
   }
-}
+};
 
 export const createAlbum=async (req, res,next) => {
   try{

@@ -2,7 +2,7 @@ import { LayoutDashboardIcon } from 'lucide-react';
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SignInOAuthButton from './SignInOAuthButton';
-import { SignedIn, SignedOut, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut,  UserButton } from '@clerk/clerk-react';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { buttonVariants } from './ui/button';
 import { cn } from '@/lib/utils';
@@ -13,7 +13,7 @@ function TopBar() {
 
 
   useEffect(() => {
-  useAuthStore.getState().checkAdminStatus();
+  checkAdminStatus();
 }, []);
 
 

@@ -1,10 +1,11 @@
 import TopBar from '@/components/TopBar'
-import FeaturedGridSkeleton from '@/skelotons/FeaturedGridSkeleton';
+// import FeaturedGridSkeleton from '@/skelotons/FeaturedGridSkeleton';
 import { useMusicStore } from '@/stores/useMusicStore';
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import FeaturedSection from './components/FeaturedSection';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import SectionGrid from './components/SectionGrid';
+import { usePlayerStore } from '@/stores/usePlayerStore';
 
 function HomePage() {
 
@@ -13,12 +14,12 @@ function HomePage() {
     fetchMadeForYouSongs,
     fetchTrendingSongs,
     isLoading,
-    error,
     madeForYouSongs,
     featuredSongs,
     trendingSongs
   } = useMusicStore();
-  
+
+  const {initializeQueue}=usePlayerStore();
 
 
     useEffect(() => {
@@ -29,6 +30,13 @@ function HomePage() {
       fetchMadeForYouSongs,
       fetchTrendingSongs
     ])
+
+    useEffect(() => {
+      if(madeForYouSongs.length>0&& featuredSongs.length >0&& trendingSongs.length>0){
+        const allSongs=[...madeForYouSongs,...trendingSongs,...featuredSongs];
+        initializeQueue(allSongs);
+      }
+    },[initializeQueue,madeForYouSongs,trendingSongs,featuredSongs])
 
 
   return (
