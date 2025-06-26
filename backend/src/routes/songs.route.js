@@ -5,8 +5,8 @@ import { getAllSongs, getFeaturedSongs, getMadeForYou, getTrending } from "../co
 const router = Router();
 
 router.get("/", protectRoute,requireAdmin,getAllSongs);
-router.get("/featured", getFeaturedSongs); 
-router.get("/made-for-you", getMadeForYou); 
+router.post("/featured", getFeaturedSongs); 
+router.post("/made-for-you", getMadeForYou); 
 router.get("/trending", getTrending); 
 
 export default router;  

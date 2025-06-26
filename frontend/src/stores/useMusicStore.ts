@@ -137,7 +137,7 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
     fetchFeaturedSongs:async()=>{
         set({isLoading:true,error:null})
         try{
-            const res=await axiosInstance.get("/songs/featured");
+            const res=await axiosInstance.post("/songs/featured");
             set({featuredSongs:res.data})
 
         }
@@ -155,7 +155,7 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
     fetchMadeForYouSongs:async()=>{
          set({isLoading:true,error:null})
         try{
-            const res=await axiosInstance.get("/songs/made-for-you");
+            const res=await axiosInstance.post("/songs/made-for-you");
             set({madeForYouSongs:res.data})
 
         }
