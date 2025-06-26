@@ -7,6 +7,9 @@ const router = Router();
 
 
 router.get("/",protectRoute,getAllUsers);
+router.get("/messages/:id",protectRoute,getMessages);
+
+
 
 
 

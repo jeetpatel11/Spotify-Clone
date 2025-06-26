@@ -3,6 +3,10 @@ import { useAuth } from '@clerk/clerk-react';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../lib/axios.ts';
 import {Loader} from 'lucide-react'
+import { useChatStore } from '@/stores/useChatStore.ts';
+
+
+const {initSocket} = useChatStore();
 const updateApitoken = (token: string | null) => {
     if (token) {
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -16,13 +20,16 @@ function AuthProvider({children}: {children: React.ReactNode}) {
 
 
 
-    const {getToken}= useAuth();
+    const {getToken,userId}= useAuth();
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
     const initializeAuth = async () => {
             try{
         const token = await getToken();
                 updateApitoken(token);
+                if(token) {
+                  if(userId) initSocket(userId);
+                }
 
                 
             }

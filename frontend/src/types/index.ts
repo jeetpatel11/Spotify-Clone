@@ -27,3 +27,12 @@ export interface Stats{
     totalArtists:number;
     totalUsers:number;
 }
+
+export interface Message{
+    _id:string;
+    senderId:string;
+    contentId:string;
+    content:string;
+    updatedAt:string;
+    createdAt:string;
+}

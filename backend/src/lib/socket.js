@@ -9,7 +9,7 @@ export const initializeSocket = (server) => {
       credentials: true,
     }
   });
-
+2
   const userSockets=new Map();
   const userActivities=new Map();
 
@@ -49,6 +49,7 @@ export const initializeSocket = (server) => {
        catch(e)
        {
         console.log(e);
+        socket.emit("message_error","Failed to send message");
        }
     })
 
@@ -56,7 +57,19 @@ export const initializeSocket = (server) => {
       let disconnectedUserId;
       for(const [userId,socketId] of userSockets.entries())
       {
-        
+        if(socketId===socket.id)
+        {
+          disconnectedUserId=userId;
+          userSockets.delete(userId);
+          userActivities.delete(userId);
+          break;
+        }
+
+        if(disconnectedUserId)
+        {
+          io.emit("user_disconnected",disconnectedUserId);
+          io.emit("user_activity",Array.from(userActivities.entries()));
+        }
       }
     })
   })

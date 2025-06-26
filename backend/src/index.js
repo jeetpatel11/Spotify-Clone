@@ -15,7 +15,7 @@ import connectDB from './lib/db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createServer, Server } from 'http';
-import { initializeSocket } from './socket/socket.js'; // Import the initializeSocket function from socket.js
+import { initializeSocket } from './lib/socket.js'; // Import the initializeSocket function from socket.js
 
 
 dotenv.config();
