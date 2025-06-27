@@ -6,7 +6,6 @@ import {Loader} from 'lucide-react'
 import { useChatStore } from '@/stores/useChatStore.ts';
 
 
-const {initSocket} = useChatStore();
 const updateApitoken = (token: string | null) => {
     if (token) {
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -22,6 +21,7 @@ function AuthProvider({children}: {children: React.ReactNode}) {
 
     const {getToken,userId}= useAuth();
     const [loading, setLoading] = useState(true);
+    const {initSocket,disconnectSocket} = useChatStore();
     useEffect(()=>{
     const initializeAuth = async () => {
             try{
@@ -30,8 +30,6 @@ function AuthProvider({children}: {children: React.ReactNode}) {
                 if(token) {
                   if(userId) initSocket(userId);
                 }
-
-                
             }
             catch (error) {   
                 updateApitoken(null);
@@ -42,7 +40,10 @@ function AuthProvider({children}: {children: React.ReactNode}) {
       }
     };
     initializeAuth();
-},[getToken])
+
+    return()=>disconnectSocket();
+
+},[getToken,userId,initSocket,disconnectSocket])
 
 
 if (loading) {
