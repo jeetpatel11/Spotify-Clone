@@ -30,7 +30,7 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
     albums:[],
     songs:[],
     isLoading:false,
-    error:null,
+    error:null, 
     currentAlbum:null,
     madeForYouSongs:[],
     trendingSongs:[],
@@ -38,7 +38,7 @@ export const useMusicStore=create<MusicStore>((set,get)=>({
     stats:{
         totalAlbums:0,
         totalArtists:0,
-        totalUsers:0,
+        totalUsers:0, 
         totalSongs:0,
     },
     isSongLoading:false,

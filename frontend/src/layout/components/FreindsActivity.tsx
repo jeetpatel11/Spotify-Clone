@@ -4,21 +4,25 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@clerk/clerk-react';
 import { useChatStore } from '@/stores/useChatStore';
+import { usePlayerStore } from '@/stores/usePlayerStore';
 
 function FriendsActivity() {
-  const { isSignedIn, getToken } = useAuth();
-  const { users, fetchUsers } = useChatStore();
-  const isPlaying = true;
+  const { isSignedIn, getToken, userId } = useAuth();
+  const { users, fetchUsers, onlineUsers, userActivities } = useChatStore();
+  const { currentSong, isPlaying } = usePlayerStore();
 
   useEffect(() => {
     const fetchWithToken = async () => {
       const token = await getToken();
       if (isSignedIn && token) {
-        fetchUsers(token);
+        fetchUsers();
       }
     };
     fetchWithToken();
   }, [isSignedIn, getToken, fetchUsers]);
+
+  // Filter out the logged-in user
+  const friends = users.filter((user) => user.clerkId !== userId);
 
   return (
     <div className="h-full bg-zinc-900 rounded-xl flex flex-col shadow-md">
@@ -34,47 +38,53 @@ function FriendsActivity() {
       ) : (
         <ScrollArea className="flex-1">
           <div className="p-5 space-y-4">
-            {users.map((user) => (
-              <div
-                key={user._id}
-                className="p-4 rounded-xl transition-all flex items-center gap-4 hover:bg-zinc-800/40 cursor-pointer"
-              >
-                <div className="relative">
-                  <Avatar className="size-12 border border-zinc-700 shadow-sm">
-                    <AvatarImage src={user.imageUrl} alt={user.fullName} />
-                    <AvatarFallback>{user.fullName[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="absolute bottom-0 right-0 h-3 w-3 bg-emerald-400 border-2 border-zinc-900 rounded-full" />
-                </div>
+            {friends.length === 0 ? (
+              <div className="text-center text-zinc-500 mt-10">No friends to display</div>
+            ) : (
+              friends.map((user) => {
+                const activity = userActivities.get(user._id) || 'Idle';
+                const isPlayingSong = activity !== 'Idle';
+                const songName = isPlayingSong ? activity.replace('Playing ', '').trim() : null;
 
-                <div className="flex flex-col min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-white font-medium truncate">{user.fullName}</span>
-                    {isPlaying && <Music className="size-4 text-emerald-400" />}
+                return (
+                  <div
+                    key={user._id}
+                    className="p-4 rounded-xl transition-all flex items-center gap-4 hover:bg-zinc-800/40 cursor-pointer"
+                  >
+                    <div className="relative">
+                      <Avatar className="size-12 border border-zinc-700 shadow-sm">
+                        <AvatarImage src={user.imageUrl} alt={user.fullName} />
+                        <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+                      </Avatar>
+                      <div
+                        className={`absolute bottom-0 right-0 h-3 w-3 border-2 border-zinc-900 rounded-full ${
+                          onlineUsers.has(user.clerkId) ? 'bg-green-500' : 'bg-zinc-700'
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </div>
+
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium truncate">{user.fullName}</span>
+                        {isPlayingSong && <Music className="size-4 text-emerald-400" />}
+                      </div>
+                      {isPlayingSong ? (
+                        <div className="text-sm text-white mt-1 truncate">{songName}</div>
+                      ) : (
+                        <div className="text-sm text-zinc-500 mt-1">Idle</div>
+                      )}
+                    </div>
                   </div>
-
-                  {isPlaying ? (
-                    <>
-                      <div className="text-sm text-white mt-1 truncate">Cardigan</div>
-                      <div className="text-xs text-zinc-400">by Taylor Swift</div>
-                    </>
-                  ) : (
-                    <div className="text-sm text-zinc-500 mt-1">Idle</div>
-                  )}
-                </div>
-              </div>
-            ))}
+                );
+              })
+            )}
           </div>
         </ScrollArea>
       )}
     </div>
   );
 }
-
-export default FriendsActivity;
-
-
-
 
 const LoginPrompt = () => {
   return (
@@ -97,3 +107,5 @@ const LoginPrompt = () => {
     </div>
   );
 };
+
+export default FriendsActivity;

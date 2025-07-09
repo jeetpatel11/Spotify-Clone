@@ -2,9 +2,12 @@ import UsersListSkeleton from "@/skelotons/UsersListSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChatStore } from "@/stores/useChatStore";
+import { useAuth } from "@clerk/clerk-react";
 
 const UsersList = () => {
+	const { userId } = useAuth();
 	const { users, selectedUser, isLoading, setSelectedUser, onlineUsers } = useChatStore();
+	const friends = users.filter((user) => user.clerkId !== userId);
 
 	return (
 		<div className='border-r border-zinc-800'>
@@ -14,7 +17,7 @@ const UsersList = () => {
 						{isLoading ? (
 							<UsersListSkeleton />
 						) : (
-							users.map((user) => (
+							friends.map((user) => (
 								<div
 									key={user._id}
 									onClick={() => setSelectedUser(user)}
