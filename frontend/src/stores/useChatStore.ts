@@ -22,7 +22,9 @@ interface ChatStore {
 	setSelectedUser: (user: User | null) => void;
 }
 
-const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
+const baseURL = import.meta.env.MODE === "development"
+  ? "http://localhost:5000"
+  : import.meta.env.VITE_API_BASE_URL;
 
 const socket = io(baseURL, {
 	autoConnect: false, // only connect if user is authenticated
