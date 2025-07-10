@@ -1,5 +1,5 @@
 import { usePlayerStore } from '@/stores/usePlayerStore';
-import React, { useEffect, useRef } from 'react';
+import  { useEffect, useRef } from 'react';
 
 function AudioPlayer() {
   const audioref = useRef<HTMLAudioElement | null>(null);

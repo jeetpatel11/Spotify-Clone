@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         
         try {
             const res = await axiosInstance.get("/admin/check");
-            console.log('Admin Check Response:', res.data);
+            console.log("Admin Check Response:", res.data);
             
             // Check if the response indicates admin status
             if (res.data && res.data.admin === true) {
@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                 set({ isAdmin: false, error: "Not an admin user" });
             }
         } catch (error: any) {
-            console.error('Admin check failed:', error);
+            console.error("Admin check failed:", error);
             
             // Handle different types of errors
             let errorMessage = "Failed to verify admin status";
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                 const data = error.response.data;
                 
                 if (status === 401) {
-                    if (data.message && data.message.includes('timestamp issue')) {
+                    if (data.message && data.message.includes("timestamp issue")) {
                         errorMessage = "Authentication timing issue - please try again";
                         shouldRetry = true;
                     } else {
@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                 } else if (data && data.message) {
                     errorMessage = data.message;
                     // Check if it's a timing issue that might resolve on retry
-                    if (data.message.includes('timestamp') || data.message.includes('clock')) {
+                    if (data.message.includes("timestamp") || data.message.includes("clock")) {
                         shouldRetry = true;
                     }
                 }
@@ -69,11 +69,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
             // Auto-retry once for timing issues after a short delay
             if (shouldRetry && !get().isLoading) {
-                console.log('Retrying admin check due to timing issue...');
+                console.log("Retrying admin check due to timing issue...");
                 setTimeout(() => {
                     // Only retry if we're not already loading and the error is still timing-related
                     const currentState = get();
-                    if (!currentState.isLoading && currentState.error?.includes('timing')) {
+                    if (!currentState.isLoading && currentState.error?.includes("timing")) {
                         get().checkAdminStatus();
                     }
                 }, 2000); // Wait 2 seconds before retry

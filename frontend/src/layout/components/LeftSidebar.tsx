@@ -1,17 +1,17 @@
 import { buttonVariants } from '@/components/ui/button'
-import { HomeIcon, Library, LibraryBigIcon, MessageCircleIcon } from 'lucide-react'
+import { HomeIcon, Library, MessageCircleIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SignedIn } from '@clerk/clerk-react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import  PlaylistSkeloton  from '@/skelotons/PlaylistSkeleton.tsx'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useMusicStore } from '@/stores/useMusicStore'
 
 
 function LeftSidebar() {
 
-  const {songs,albums,fetchAlbums,isLoading}=useMusicStore();
+  const {albums,fetchAlbums,isLoading}=useMusicStore();
 
     useEffect(()=>{
       fetchAlbums()

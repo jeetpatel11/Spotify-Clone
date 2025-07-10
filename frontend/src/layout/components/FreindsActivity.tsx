@@ -4,22 +4,25 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@clerk/clerk-react';
 import { useChatStore } from '@/stores/useChatStore';
-import { usePlayerStore } from '@/stores/usePlayerStore';
 
 function FriendsActivity() {
   const { isSignedIn, getToken, userId } = useAuth();
-  const { users, fetchUsers, onlineUsers, userActivities } = useChatStore();
-  const { currentSong, isPlaying } = usePlayerStore();
+  const { users, fetchUsers, onlineUsers, userActivities, initSocket } = useChatStore();
+
 
   useEffect(() => {
     const fetchWithToken = async () => {
       const token = await getToken();
-      if (isSignedIn && token) {
+      if (isSignedIn && token && userId) {
+        console.log("🔗 Initializing socket and fetching users for:", userId);
+        // Initialize socket connection
+        initSocket(userId);
+        // Fetch users
         fetchUsers();
       }
     };
     fetchWithToken();
-  }, [isSignedIn, getToken, fetchUsers]);
+  }, [isSignedIn, getToken, fetchUsers, initSocket, userId]);
 
   // Filter out the logged-in user
   const friends = users.filter((user) => user.clerkId !== userId);
@@ -109,3 +112,4 @@ const LoginPrompt = () => {
 };
 
 export default FriendsActivity;
+

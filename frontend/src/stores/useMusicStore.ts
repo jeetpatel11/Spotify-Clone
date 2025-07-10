@@ -26,7 +26,7 @@ interface MusicStore{
     deleteAlbum:(id:string)=>Promise<void>;
 }
 
-export const useMusicStore=create<MusicStore>((set,get)=>({
+export const useMusicStore=create<MusicStore>((set)=>({
     albums:[],
     songs:[],
     isLoading:false,

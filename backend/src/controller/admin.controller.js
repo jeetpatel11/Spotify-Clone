@@ -23,10 +23,36 @@ const uploadCloudinaryFile = async (file) => {
 };
 
 
-export const checkAdmin=async (req, res,next) => {
-  
-  res.status(200).json({admin:true});
+export const checkAdmin = async (req, res, next) => {
+  try {
+    // If we reach this point, it means the middleware (protectRoute + requireAdmin) 
+    // has already verified the user is authenticated and is an admin
+    // The req.user should be populated by the requireAdmin middleware
+    
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ 
+        admin: false, 
+        message: "Access denied. Admin privileges required." 
+      });
+    }
 
+    // Return admin status with user information
+    res.status(200).json({
+      admin: true,
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        role: req.user.role
+      }
+    });
+
+  } catch (error) {
+    console.error("❌ checkAdmin error:", error);
+    res.status(500).json({ 
+      admin: false, 
+      message: "Internal server error during admin verification" 
+    });
+  }
 }
 export const createSong=async (req, res,next) => {
   try{

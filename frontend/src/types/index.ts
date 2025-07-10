@@ -29,9 +29,11 @@ export interface Stats{
 }
 
 export interface Message{
+    recipientId(recipientId: any, arg1: Message[]): unknown;
     _id:string;
     senderId:string;
     contentId:string;
+    receiverId:string;
     content:string;
     updatedAt:string;
     createdAt:string;

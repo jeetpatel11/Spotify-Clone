@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useMusicStore } from '@/stores/useMusicStore';
 import { usePlayerStore } from '@/stores/usePlayerStore';
 import { Clock, Pause, Play } from 'lucide-react';
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 export const formatDuration=(duration: number)=>{
@@ -14,8 +14,8 @@ export const formatDuration=(duration: number)=>{
 
 function AlbumPage() {
     const {id}=useParams()
-    const {fetchAlbumById,currentAlbum,isLoading}=useMusicStore();
-    const {albumId}=useParams();
+    const {fetchAlbumById,currentAlbum}=useMusicStore();
+  
     const {currentSong,isPlaying,playAlbum,tooglePlay}=usePlayerStore();
 
     useEffect(()=>{

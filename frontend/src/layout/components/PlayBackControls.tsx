@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { formatDuration } from '@/page/album/AlbumPage';
 import { usePlayerStore } from '@/stores/usePlayerStore';
-import { icons, Laptop2, ListMusic, Mic2, Pause, Play, Repeat, Shuffle, SkipBack, Volume1 } from 'lucide-react';
+import {  Laptop2, ListMusic, Mic2, Pause, Play, Repeat, Shuffle, SkipBack, Volume1 } from 'lucide-react';
 import React, { useEffect, useRef } from 'react'
 
 function PlayBackControls() {
@@ -11,7 +11,6 @@ function PlayBackControls() {
     const [voulume,setVolume] = React.useState(75);
     const [duration,setDuration] = React.useState(0);
     const [currentTime,setCurrentTime] = React.useState(0);
-    const [isDraging,setIsDraging] = React.useState(false);
 
     const audioRef=useRef<HTMLAudioElement>(null);
 

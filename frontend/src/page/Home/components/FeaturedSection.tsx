@@ -1,6 +1,6 @@
 import FeaturedGridSkeleton from '../../../skelotons/FeaturedGridSkeleton.tsx';
 import { useMusicStore } from '@/stores/useMusicStore'
-import React from 'react'
+
 import PlayButton from './PlayButton.tsx';
 
 function FeaturedSection() {

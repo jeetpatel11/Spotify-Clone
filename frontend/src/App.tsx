@@ -1,9 +1,9 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './page/Home/HomePage';
 import AuthCallbackPage from './page/Auth-callback/AuthCallbackPage';
-import { axiosInstance } from '../src/lib/axios.ts';
+// import { axiosInstance } from '../src/lib/axios.ts';
 import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 import MainLayout from './layout/MainLayout.tsx';
 import ChatPage from './page/chat/ChatPage.tsx';

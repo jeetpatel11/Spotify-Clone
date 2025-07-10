@@ -1,8 +1,8 @@
 import { LayoutDashboardIcon } from 'lucide-react';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SignInOAuthButton from './SignInOAuthButton';
-import { SignedIn, SignedOut,  UserButton } from '@clerk/clerk-react';
+import {  SignedOut,  UserButton } from '@clerk/clerk-react';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { buttonVariants } from './ui/button';
 import { cn } from '@/lib/utils';
