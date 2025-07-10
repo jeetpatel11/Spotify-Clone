@@ -28,12 +28,11 @@ const httpServer = createServer(app);
 initializeSocket(httpServer);
 
 
-app.use(cors(
-  {
-    origin: 'http://localhost:3000',
-    credentials: true
-  }
-))
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://spotifyappa.netlify.app'],
+  credentials: true
+}));
+
 app.use(cookieParser()); // ✅ Add this BEFORE protectRoute
 
 app.use(express.json());
