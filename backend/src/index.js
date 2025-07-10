@@ -6,7 +6,7 @@ import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
-
+import rateLimit from 'express-rate-limit';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import adminRoutes from './routes/admin.route.js';
