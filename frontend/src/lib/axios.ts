@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { Clerk } from '@clerk/clerk-js'; // ✅ Not a hook!
+
+declare global {
+  interface Window {
+    Clerk?: any;
+  }
+}
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.MODE === 'development'
@@ -9,10 +14,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
-  const token = await Clerk?.session?.getToken(); // ✅ This works outside React
+  // Check if we're in a browser and Clerk is loaded
+  const token = await window.Clerk?.session?.getToken();
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 

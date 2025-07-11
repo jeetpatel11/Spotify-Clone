@@ -11,7 +11,24 @@ const MessageInput = () => {
 	const { selectedUser, sendMessage } = useChatStore();
 
 	const handleSend = () => {
-		if (!selectedUser || !user || !newMessage) return;
+		if (!newMessage.trim()) return;
+
+		if (!user || !user.id) {
+			console.warn("❌ User not available for sending message");
+			return;
+		}
+
+		if (!selectedUser || !selectedUser.clerkId) {
+			console.warn("❌ No recipient selected");
+			return;
+		}
+
+		console.log("📤 Sending message:", {
+			from: user.id,
+			to: selectedUser.clerkId,
+			content: newMessage,
+		});
+
 		sendMessage(selectedUser.clerkId, user.id, newMessage.trim());
 		setNewMessage("");
 	};
@@ -34,4 +51,5 @@ const MessageInput = () => {
 		</div>
 	);
 };
+
 export default MessageInput;

@@ -47,7 +47,7 @@ app.use(fileUpload({
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 30, // limit each IP to 30 requests per minute
+  max: 100, // limit each IP to 30 requests per minute
   message: "Too many requests, please try again later.",
 });
 

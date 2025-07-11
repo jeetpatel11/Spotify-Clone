@@ -19,10 +19,13 @@ const formatTime = (date: string) => {
 const ChatPage = () => {
 	const { user } = useUser();
 	const { messages, selectedUser, fetchUsers, fetchMessages } = useChatStore();
-
+	const { initSocket } = useChatStore();
 	useEffect(() => {
-		if (user) fetchUsers();
-	}, [fetchUsers, user]);
+  if (user?.id) {
+    fetchUsers();
+    initSocket(user.id);  // Add this line
+  }
+}, [fetchUsers, user]);
 
 	useEffect(() => {
 		if (selectedUser) fetchMessages(selectedUser.clerkId);

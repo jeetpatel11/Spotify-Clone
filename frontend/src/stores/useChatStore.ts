@@ -42,7 +42,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 	messages: [],
 	selectedUser: null,
 
-	setSelectedUser: (user) => set({ selectedUser: user }),
+	setSelectedUser: (user) => 
+  set({ selectedUser: user, messages: [] }),
 
 	fetchUsers: async () => {
 		set({ isLoading: true, error: null });

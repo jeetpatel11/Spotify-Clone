@@ -17,7 +17,6 @@ function TopBar() {
 }, []);
 
 
-  console.log("ADDDDDDDDdd",isAdmin);
 
   return (
     <div className='w-full rounded-md flex items-center justify-between top-0 p-4 sticky bg-zinc-900/75 backdrop-blur-md z-10 '>
