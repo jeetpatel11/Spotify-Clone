@@ -12,6 +12,9 @@ interface MusicStore {
   currentAlbum: Album | null;
   madeForYouSongs: Song[];
   trendingSongs: Song[];
+  
+  isMadeForYouLoading: boolean;
+  isTrendingLoading: boolean;
   featuredSongs: Song[];
   stats: Stats;
 
@@ -41,6 +44,8 @@ export const useMusicStore = create<MusicStore>((set) => ({
     totalUsers: 0,
     totalSongs: 0,
   },
+  isMadeForYouLoading: false,
+  isTrendingLoading: false,
 
   fetchAlbums: async () => {
     set({ isLoading: true, error: null });
@@ -79,28 +84,29 @@ export const useMusicStore = create<MusicStore>((set) => ({
   },
 
   fetchMadeForYouSongs: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const res = await axiosInstance.post('/songs/made-for-you');
-      set({ madeForYouSongs: res.data });
-    } catch (e) {
-      set({ error: e instanceof Error ? e.message : String(e) });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  set({ isMadeForYouLoading: true, error: null });
+  try {
+    const res = await axiosInstance.post('/songs/made-for-you');
+    set({ madeForYouSongs: res.data });
+  } catch (e) {
+    set({ error: e instanceof Error ? e.message : String(e) });
+  } finally {
+    set({ isMadeForYouLoading: false });
+  }
+},
 
-  fetchTrendingSongs: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const res = await axiosInstance.get('/songs/trending');
-      set({ trendingSongs: res.data });
-    } catch (e) {
-      set({ error: e instanceof Error ? e.message : String(e) });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+fetchTrendingSongs: async () => {
+  set({ isTrendingLoading: true, error: null });
+  try {
+    const res = await axiosInstance.get('/songs/trending');
+    set({ trendingSongs: res.data });
+  } catch (e) {
+    set({ error: e instanceof Error ? e.message : String(e) });
+  } finally {
+    set({ isTrendingLoading: false });
+  }
+},
+
 
   fetchstats: async () => {
     set({ isLoading: true, error: null });
